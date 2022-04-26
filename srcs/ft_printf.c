@@ -1,111 +1,172 @@
-#include "ft_printf.h"
+#include "../includes/ft_printf.h"
+
+// //this function check for the flags
+// static void	check_flags(char *str, t_format *flags)
+// {
+// 	if (*str == ' ')
+// 		flags->space = 1;
+// 	if (*str == '+')
+// 		flags->plus = 1;
+// 	if (*str == '-')
+// 		flags->minus = 1;
+// 	if (*str == '#')
+// 		flags->hash = 1;
+// 	if (*str == '0')
+// 		flags->zero = 1;
+// }
+
+// //calculate the width precision
+// static char	*check_width_precision(char *str, t_format *flags)
+// {
+// 	if (*str >= '1' && *str <= '9')
+// 	{
+// 		while (ft_isdigit(*str))
+// 			flags->width = flags->width * 10 + *str - 48;
+// 		str--;
+// 	}
+// 	if (*str == '.')
+// 	{
+// 		flags->dot = 1;
+// 		str++;
+// 		while (ft_isdigit(*str))
+// 			flags->precision = flags->precision * 10 + *str - 48;
+// 		str--;
+// 	}
+// 	return (str);
+// }
 
 //this function will reset the struct values to 0
-static void	reset_format(t_format *flags)
+static t_format	*reset_format(t_format *frmt)
 {
-	flags->width = 0;
-	flags->prc = 0;
-	flags->zero = 0;
-	flags->dot = 0;
-	flags->hash = 0;
-	flags->plus = 0;
-	flags->minus = 0;
-	flags->space = 0;
-	// flags->cap_x = 0;
-	flags->count = 0;
-	return (flags);
+	frmt->space = 0;
+	frmt->plus = 0;
+	frmt->minus = 0;
+	frmt->hash = 0;
+	frmt->zero = 0;
+
+	frmt->dot = 0;
+	frmt->precision = 0;
+	frmt->width = 0;
+	frmt->zeroes = 0;
+	// frmt->cap_x = 0;
+	return (frmt);
 }
 
-//this function check for the flags
-static void	check_flags(char *str, t_format *input)
+static void	handle_specifier(t_format *frmt, char *input, int i)
 {
-	if (*str == ' ')
-		flags->space = 1;
-	if (*str == '+')
-		flags->plus = 1;
-	if (*str == '-')
-		flags->minus = 1;
-	if (*str == '#')
-		flags->hash = 1;
-	if (*str == '0')
-		flags->zero = 1;
+	// if (input[i] == 'd' || input[i] == 'i')//	decimal
+	// 	ft_printf_int(frmt);
+	if (input[i] == 'c')//						character
+		ft_printf_char(frmt);
+	// if (input[i] == 's')//						string
+	// 	ft_printf_str(frmt);
+	// if (input[i] == 'u')//						unsigned int
+	// 	ft_printf_uint(frmt);
+	// if (input[i] == 'x' || input[i] == 'X')//	hexadecimal
+	// 	ft_printf_hex(frmt, input[i]);
+	// if (input[i] == 'p')//						pointer
+	// 	ft_printf_ptr(frmt);
+	if (input[i] == '%')//						prints '%' character
+		frmt->size += write(1, &input[i], 1);
 }
 
-//calculate the width precision
-static char	*check_width_precision(char *str, t_format *flags)
+//check for "csupdiuxX%" after the '%' sign
+//	return 1 if have
+//	return 0 if dont have
+static int	check_specifier(char input)
 {
-	if (*str >= '1' && *str <= '9')
-	{
-		while (ft_isdigit(*str))
-			flags->width = flags->width * 10 + *str++ - 48;
-		str--;
-	}
-	if (*str == '.')
-	{
-		flags->dot = 1;
-		str++;
-		while (ft_isdigit(*str))
-			flags->precision = flags->precision * 10 + *str++ - 48;
-		str--;
-	}
-	return (str);
+	char	*type;
+
+	type = "csupdiuxX%";
+	if (ft_strchr(type, input))
+		return (1);
+	return (0);
 }
 
-//check for specifier
-static int	*check_specifier(char *str, t_format *flags)
+static int	check_width_precision(t_format *frmt, char *input, int i)
 {
-	while (*str && (!ft_strchr("csdiuxXp%", *str)))
+	if (input[i] >= '1' && input[i] <= '9')
 	{
-		check_flags(str, flags);
-		str = check_width_precision(str, flags);
-		str++;
+		while (ft_isdigit(input[i]))
+		{
+			frmt->width = frmt->width * 10 + input[i] - '0';
+			i++;
+		}
+		i--;
 	}
-	if (*str == 'd' || *str == 'i')//	decimal
-		ft_printf_int(flags);
-	if (*str == 'c')//					character
-		ft_printf_char(flags);
-	if (*str == 's')//					string
-		ft_printf_str(flags);
-	if (*str == 'u')//					unsigned int
-		ft_printf_uint(flags);
-	if (*str == 'x' || *str == 'X')//	hexadecimal
-		ft_printf_hex(flags, *str);
-	if (*str == 'p')//					pointer
-		ft_printf_ptr(flags);
-	if (*str == '%')//					prints '%' character
-		flags->size += ft_putchar('%');
-	//str++
-	return (++str);
+	if (input[i] == '.')
+	{
+		frmt->dot = 1;
+		i++;
+		while (ft_isdigit(input[i]))
+		{
+			frmt->precision = frmt->precision * 10 + input[i] - '0';
+			i++;
+		}
+		i--;
+	}
+	return (i);
 }
+
+//this function will trverse through the input string 
+//in the case of encountering %, it does :
+//1. reset the format type
+//2. populate the format type
+//3. process the format and print accordingly with argp
+//if not, just print that character to the screen
+static int	handle_flags(t_format *frmt, char *input, int i)
+{
+	while (!check_specifier(input[i]))
+	{
+		if (input[i] == ' ')
+			frmt->space = 1;
+		if (input[i] == '+')
+			frmt->plus = 1;
+		if (input[i] == '-')
+			frmt->minus = 1;
+		if (input[i] == '#')
+			frmt->hash = 1;
+		if (input[i] == '0')
+			frmt->zero = 1;
+		// if (ft_isdigit(input[i]) && !frmt->precision && input[i + 1] != '.')
+		// 	frmt->width = (frmt->width * 10) + (input[i] - '0');
+		// if (ft_isdigit(input[i]) && frmt->dot)
+		//	frmt->precision = (frmt->precision * 10) + (input[i] - '0');
+		i++;
+	}
+	check_width_precision(frmt, input, i);
+	handle_specifier(frmt, input, i);
+	return (i);
+}
+
 
 int ft_printf(const char *input, ...)
 {
+	t_format *frmt;
+	int idx;
 	int output;
-	char	*str;
-	t_format *flags;
 
+	idx = 0;
 	output = 0;
-	flags = (t_format *)malloc(sizeof(t_format));
-	if (!flags)
+	frmt = (t_format *)malloc(sizeof(t_format));
+	if (!frmt)
 		return (-1);
-	va_start(flags->args, input);
-	flags->size = 0;
-	while (*str)//	while the string exists
+	va_start(frmt->args, input);
+	while (input[idx])//	while the string exists
 	{
-		if (*str == '%')
+		frmt = reset_format(frmt);// reset struct to default 0
+		if (input[idx] == '%')
 		{
-			reset_format(flags);
-			str = check_specifier(++str, flags);
-			//str = check_specifier(flags, (char *)input, i + 1);//i + 1 because we start evaluate after the % sign
+			idx = handle_flags(frmt, (char *)input, idx + 1);
 		}
 		else
 		{
-			output += write(1, str++, 1);
+			output += write(1, &input[idx], 1);
 		}
-		// res += flags->count;
+		output += frmt->size;
+		idx++;
 	}
-	va_end(flags->args);
-	output += flags->size;
-	free(flags);
+	va_end(frmt->args);
+	free(frmt);
 	return (output);
 }
