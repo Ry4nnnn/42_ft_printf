@@ -6,20 +6,14 @@ void	ft_printf_char(t_format *frmt)
 
 	if (frmt->minus == 0)
 	{
-		while (frmt->width > 1)
-		{
-			frmt->size += ft_putchar_fd(' ', 1);
-			frmt->width--;
-		}
-		frmt->size += ft_putchar_fd(c, 1);
+		while (frmt->width-- > 1)
+			frmt->size += ft_putchar(' ');
+		frmt->size += ft_putchar(c);
 	}
 	else
 	{
-		frmt->size += ft_putchar_fd(c, 1);
-		while (frmt->width > 1)
-		{
-			frmt->size += ft_putchar_fd(' ', 1);
-			frmt->width--;
-		}
+		frmt->size += ft_putchar(c);
+		while (frmt->width-- > 1)
+			frmt->size += ft_putchar(' ');
 	}
 }

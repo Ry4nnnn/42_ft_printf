@@ -18,15 +18,22 @@ typedef struct s_format
 	int			width;
 	int			space;
 	int			zero;
-	// int		cap_x;
+	int			cap_x;
 	int			hash;
-	int 		zeroes;
+	// int 		zeroes;
 	int			size;
 }				t_format;
 
 //main function
 int ft_printf(const char *str, ...);
 
+//handling specifier functions
+void	ft_printf_int(t_format *frmt);
 void	ft_printf_char(t_format *frmt);
+void	ft_printf_str(t_format *frmt);
+void	ft_printf_uint(t_format *frmt);
+void	ft_printf_hex(t_format *frmt);
+void	ft_printf_ptr(t_format *frmt);
+
 
 #endif
