@@ -2,18 +2,51 @@
 
 void	ft_printf_char(t_format *frmt)
 {
-	const char	c = va_arg(frmt->args, int);
+	if (!frmt->width && !frmt->minus)
+		print_char(frmt);
+	else if (frmt->width && !frmt->minus)
+		print_width(frmt);
+	else if (frmt->width && frmt->minus)
+		print_width_minus(frmt);
+}
 
-	if (frmt->minus == 0)
+static void	print_char(t_format *frmt)
+{
+	int c;
+
+	c = va_arg(frmt->args, int);
+	frmt->size += 1;
+	write(1, &c, 1);
+}
+
+static void	print_width(t_format *frmt)
+{
+	int width;
+	int c;
+
+	width = frmt->width;
+	while (width-- > 1)
 	{
-		while (frmt->width-- > 1)
-			frmt->size += ft_putchar(' ');
-		frmt->size += ft_putchar(c);
+		frmt->size += 1;
+		ft_putchar_fd(' ', 1);
 	}
-	else
+	c = va_arg(frmt->args, int);
+	frmt->size += 1;
+	ft_putchar_fd(c, 1);
+}
+
+static void	print_width_minus(t_format *frmt)
+{
+	int	width;
+	int	c;
+
+	width = frmt->width;
+	c = va_arg(frmt->args, int);
+	ft_putchar_fd(c, 1);
+	frmt->size += 1;
+	while (width-- > 1)
 	{
-		frmt->size += ft_putchar(c);
-		while (frmt->width-- > 1)
-			frmt->size += ft_putchar(' ');
+		ft_putchar_fd(' ', 1);
+		frmt->size += 1;
 	}
 }

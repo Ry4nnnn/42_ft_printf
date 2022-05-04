@@ -8,12 +8,11 @@ static t_format	*reset_format(t_format *frmt)
 	frmt->minus = 0;
 	frmt->hash = 0;
 	frmt->zero = 0;
-
 	frmt->dot = 0;
 	frmt->precision = 0;
 	frmt->width = 0;
-	// frmt->zeroes = 0;
-	// frmt->cap_x = 0;
+	frmt->cap_x = 0;
+	frmt->size = 0;
 	return (frmt);
 }
 
@@ -58,24 +57,26 @@ static int	handle_flags(t_format *frmt, char *input, int i)
 {
 	while (!check_specifier(input[i]))
 	{
-		if (input[i] == ' ')
-			frmt->space = 1;
-		if (input[i] == '+')
-			frmt->plus = 1;
 		if (input[i] == '-')
 			frmt->minus = 1;
-		if (input[i] == '#')
-			frmt->hash = 1;
-		if (input[i] == '0')
-			frmt->zero = 1;
-		if (input[i] == '.')
-			frmt->dot = 1;
+		if (input[i] == ' ')
+			frmt->space = 1;
 		if (ft_isdigit(input[i]) && !frmt->precision && input[i + 1] != '.')
 			frmt->width = (frmt->width * 10) + (input[i] - '0');
 		if (ft_isdigit(input[i]) && frmt->dot)
 			frmt->precision = (frmt->precision * 10) + (input[i] - '0');
+		if (input[i] == '0' && frmt->width == 0 && !frmt->minus && !frmt->precision)
+			frmt->zero = 1;
+		if (input[i] == '+')
+			frmt->plus = 1;
+		if (input[i] == '#')
+			frmt->hash = 2;
+		if (input[i] == '.')
+			frmt->dot = 1;
 		i++;
 	}
+	if (input[i] == 'X')
+		frmt->cap_x = 1;
 	handle_specifier(frmt, input, i);
 	return (i);
 }
@@ -89,23 +90,23 @@ int ft_printf(const char *input, ...)
 
 	i = 0;
 	output = 0;
-	frmt = (t_format *)malloc(sizeof(t_format));
+	frmt = malloc(sizeof(t_format*));
 	if (!frmt)
 		return (-1);
+	i = -1;
 	va_start(frmt->args, input);
-	while (input[i])//	while the string exists
+	while (input[++i])//	while the string exists
 	{
-		frmt = reset_format(frmt);// reset struct to default 0
 		if (input[i] == '%')
 		{
+			frmt = reset_format(frmt);// reset struct to default 0
 			i = handle_flags(frmt, (char *)input, i + 1);
 		}
 		else
 		{
-			output += write(1, &input[i], 1);
+			output += write(1, &input[i], 1);//	print out character if its not %
 		}
 		output += frmt->size;
-		i++;
 	}
 	va_end(frmt->args);
 	free(frmt);

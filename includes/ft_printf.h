@@ -14,13 +14,11 @@ typedef struct s_format
 	int			precision;
 	int			dot;
 	int			minus;
-	int			count;
 	int			width;
 	int			space;
 	int			zero;
 	int			cap_x;
 	int			hash;
-	// int 		zeroes;
 	int			size;
 }				t_format;
 
@@ -35,5 +33,10 @@ void	ft_printf_uint(t_format *frmt);
 void	ft_printf_hex(t_format *frmt);
 void	ft_printf_ptr(t_format *frmt);
 
+//utils
+void	ft_putnchar_fd(char c, int n, int fd);
+void	ft_putnbr_fd_long(unsigned int num, int fd);
+char	*ft_rev(char *str);
+char	*to_hex(unsigned long long num);
 
 #endif
