@@ -39,10 +39,10 @@ static void	handle_specifier(t_format *frmt, char *input, int i)
 		ft_printf_str(frmt);
 	if (input[i] == 'u')//						unsigned int
 		ft_printf_uint(frmt);
-	if (input[i] == 'x' || input[i] == 'X')//	hexadecimal
-		ft_printf_hex(frmt);
-	if (input[i] == 'p')//						pointer
-		ft_printf_ptr(frmt);
+	// if (input[i] == 'x' || input[i] == 'X')//	hexadecimal
+	// 	ft_printf_hex(frmt);
+	// if (input[i] == 'p')//						pointer
+	// 	ft_printf_ptr(frmt);
 	if (input[i] == '%')//						prints '%' character
 		frmt->size += write(1, &input[i], 1);
 }
@@ -90,18 +90,16 @@ int ft_printf(const char *input, ...)
 
 	i = 0;
 	output = 0;
-	frmt = malloc(sizeof(t_format*));
+	frmt = (t_format *)malloc(sizeof(t_format));
 	if (!frmt)
 		return (-1);
 	i = -1;
 	va_start(frmt->args, input);
 	while (input[++i])//	while the string exists
 	{
+		frmt = reset_format(frmt);// reset struct to default 0
 		if (input[i] == '%')
-		{
-			frmt = reset_format(frmt);// reset struct to default 0
 			i = handle_flags(frmt, (char *)input, i + 1);
-		}
 		else
 		{
 			output += write(1, &input[i], 1);//	print out character if its not %

@@ -10,15 +10,15 @@
 typedef struct s_format
 {
 	va_list  args;//	arg to print out
-	int			plus;
-	int			precision;
-	int			dot;
 	int			minus;
-	int			width;
 	int			space;
+	int			width;
+	int			precision;
 	int			zero;
-	int			cap_x;
+	int			plus;
 	int			hash;
+	int			dot;
+	int			cap_x;
 	int			size;
 }				t_format;
 
@@ -38,5 +38,6 @@ void	ft_putnchar_fd(char c, int n, int fd);
 void	ft_putnbr_fd_long(unsigned int num, int fd);
 char	*ft_rev(char *str);
 char	*to_hex(unsigned long long num);
+char	*ft_long_itoa(long long n);
 
 #endif

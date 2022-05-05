@@ -1,16 +1,6 @@
 #include "../includes/ft_printf.h"
 
-void	ft_printf_char(t_format *frmt)
-{
-	if (!frmt->width && !frmt->minus)
-		print_char(frmt);
-	else if (frmt->width && !frmt->minus)
-		print_width(frmt);
-	else if (frmt->width && frmt->minus)
-		print_width_minus(frmt);
-}
-
-static void	print_char(t_format *frmt)
+void	print_char(t_format *frmt)
 {
 	int c;
 
@@ -19,7 +9,7 @@ static void	print_char(t_format *frmt)
 	write(1, &c, 1);
 }
 
-static void	print_width(t_format *frmt)
+void	print_width(t_format *frmt)
 {
 	int width;
 	int c;
@@ -35,7 +25,7 @@ static void	print_width(t_format *frmt)
 	ft_putchar_fd(c, 1);
 }
 
-static void	print_width_minus(t_format *frmt)
+void	print_width_minus(t_format *frmt)
 {
 	int	width;
 	int	c;
@@ -49,4 +39,14 @@ static void	print_width_minus(t_format *frmt)
 		ft_putchar_fd(' ', 1);
 		frmt->size += 1;
 	}
+}
+
+void	ft_printf_char(t_format *frmt)
+{
+	if (!frmt->width && !frmt->minus)
+		print_char(frmt);
+	else if (frmt->width && !frmt->minus)
+		print_width(frmt);
+	else if (frmt->width && frmt->minus)
+		print_width_minus(frmt);
 }
