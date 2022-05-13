@@ -13,7 +13,7 @@ all		: ${NAME}
 bonus	: ${NAME}
 
 $(NAME)	: ${OBJS}
-		make re -C ${LIB}
+		make -C ${LIB}
 		ar rcs ${NAME} ${OBJS} ${LIB}/*.o
 
 %.o : %.c
