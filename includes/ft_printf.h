@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/13 22:10:06 by welim             #+#    #+#             */
+/*   Updated: 2022/05/13 22:10:07 by welim            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
@@ -11,7 +23,7 @@
 //struct that stores types of format
 typedef struct s_format
 {
-	va_list  args;//	arg to print out
+	va_list		args;
 	int			minus;
 	int			space;
 	int			width;
@@ -25,7 +37,7 @@ typedef struct s_format
 }				t_format;
 
 //main function
-int ft_printf(const char *str, ...);
+int		ft_printf(const char *str, ...);
 
 //handling specifier functions
 void	ft_printf_int(t_format *frmt);

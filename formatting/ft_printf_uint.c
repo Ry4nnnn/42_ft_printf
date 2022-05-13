@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf_uint.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/13 22:02:58 by welim             #+#    #+#             */
+/*   Updated: 2022/05/13 22:08:52 by welim            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/ft_printf.h"
 
 static void	count_spc_prc(t_format *frmt, char *str)
@@ -26,7 +38,7 @@ static void	count_spc_prc(t_format *frmt, char *str)
 static void	print_spc_plus(t_format *frmt)
 {
 	if (frmt->space)
-		ft_putchar_fd(' ' , 1);
+		ft_putchar_fd(' ', 1);
 	if (frmt->plus)
 		ft_putchar_fd('+', 1);
 }
@@ -61,9 +73,9 @@ static void	format_uint(t_format *frmt, char *str)
 void	ft_printf_uint(t_format *frmt)
 {
 	unsigned int	num;
-	char *str;
+	char			*str;
 
-	num  = va_arg(frmt->args, unsigned int);
+	num = va_arg(frmt->args, unsigned int);
 	str = ft_long_itoa(num);
 	count_spc_prc(frmt, str);
 	format_uint(frmt, str);

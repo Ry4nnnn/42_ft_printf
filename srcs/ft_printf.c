@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/13 22:15:18 by welim             #+#    #+#             */
+/*   Updated: 2022/05/13 22:15:18 by welim            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/ft_printf.h"
 
 //this function will reset the struct values to 0
@@ -31,19 +43,19 @@ static int	check_specifier(char input)
 
 static void	handle_specifier(t_format *frmt, char *input, int i)
 {
-	if (input[i] == 'd' || input[i] == 'i')//	decimal
+	if (input[i] == 'd' || input[i] == 'i')
 		ft_printf_int(frmt);
-	if (input[i] == 'c')//						character
+	if (input[i] == 'c')
 		ft_printf_char(frmt);
-	if (input[i] == 's')//						string
+	if (input[i] == 's')
 		ft_printf_str(frmt);
-	if (input[i] == 'u')//						unsigned int
+	if (input[i] == 'u')
 		ft_printf_uint(frmt);
-	if (input[i] == 'x' || input[i] == 'X')//	hexadecimal
+	if (input[i] == 'x' || input[i] == 'X')
 		ft_printf_hex(frmt);
-	if (input[i] == 'p')//						pointer
+	if (input[i] == 'p')
 		ft_printf_ptr(frmt);
-	if (input[i] == '%')//						prints '%' character
+	if (input[i] == '%')
 		frmt->size += write(1, &input[i], 1);
 }
 
@@ -65,7 +77,8 @@ static int	handle_flags(t_format *frmt, char *input, int i)
 			frmt->precision = (frmt->precision * 10) + (input[i] - '0');
 		if (ft_isdigit(input[i]) && !frmt->precision && input[i + 1] != '.')
 			frmt->width = (frmt->width * 10) + (input[i] - '0');
-		if (input[i] == '0' && frmt->width == 0 && !frmt->minus && !frmt->precision)
+		if (input[i] == '0' && frmt->width == 0
+			&& !frmt->minus && !frmt->precision)
 			frmt->zero = 1;
 		if (input[i] == '+')
 			frmt->plus = 1;
@@ -75,19 +88,17 @@ static int	handle_flags(t_format *frmt, char *input, int i)
 			frmt->dot = 1;
 		i++;
 	}
-	// printf ("%d", frmt->precision);
 	if (input[i] == 'X')
 		frmt->cap_x = 1;
 	handle_specifier(frmt, input, i);
 	return (i);
 }
 
-
-int ft_printf(const char *input, ...)
+int	ft_printf(const char *input, ...)
 {
-	t_format *frmt;
-	int i;
-	int output;
+	t_format	*frmt;
+	int			i;
+	int			output;
 
 	i = 0;
 	output = 0;
@@ -96,17 +107,13 @@ int ft_printf(const char *input, ...)
 		return (-1);
 	i = -1;
 	va_start(frmt->args, input);
-	while (input[++i])//	while the string exists
+	while (input[++i])
 	{
-		frmt = reset_format(frmt);// reset struct to default 0
+		frmt = reset_format(frmt);
 		if (input[i] == '%')
-		{
 			i = handle_flags(frmt, (char *)input, i + 1);
-		}
 		else
-		{
-			output += write(1, &input[i], 1);//	print out character if its not %
-		}
+			output += write(1, &input[i], 1);
 		output += frmt->size;
 	}
 	va_end(frmt->args);

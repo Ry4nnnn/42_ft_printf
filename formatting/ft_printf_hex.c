@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf_hex.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/13 22:02:47 by welim             #+#    #+#             */
+/*   Updated: 2022/05/13 22:04:11 by welim            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/ft_printf.h"
 
 //way #1
@@ -26,14 +38,12 @@
 //way #2
 static char	*ft_itoa_hex(long long num, t_format *frmt)
 {
-	char res[1024];
-	int	i;
-	int	offset;
+	char	res[1024];
+	int		i;
+	int		offset;
 
 	if (num == 0)
-	{
-		return(ft_rev("0"));
-	}
+		return (ft_rev("0"));
 	if (!frmt->cap_x)
 		offset = 87;
 	else
@@ -104,9 +114,9 @@ static void	printf_x(t_format *frmt, char *hex, char *sign)
 
 void	ft_printf_hex(t_format *frmt)
 {
-	long long num;
-	char *sign;
-	char *hex;
+	long long	num;
+	char		*sign;
+	char		*hex;
 
 	sign = "0x";
 	num = va_arg(frmt->args, int);

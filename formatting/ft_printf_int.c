@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf_int.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/13 22:02:52 by welim             #+#    #+#             */
+/*   Updated: 2022/05/13 22:04:45 by welim            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/ft_printf.h"
 
 static void	count_spc_prc(t_format *frmt, char *str)
@@ -33,7 +45,7 @@ static void	print_nint(t_format *frmt, char *str)
 	}
 	else
 	{
-		if  (frmt->minus)
+		if (frmt->minus)
 		{
 			ft_putchar_fd('-', 1);
 			ft_putnchar_fd('0', frmt->precision, 1);
@@ -54,7 +66,7 @@ static void	print_nint(t_format *frmt, char *str)
 static void	print_spc_plus(t_format *frmt)
 {
 	if (frmt->space)
-		ft_putchar_fd(' ' , 1);
+		ft_putchar_fd(' ', 1);
 	if (frmt->plus)
 		ft_putchar_fd('+', 1);
 }

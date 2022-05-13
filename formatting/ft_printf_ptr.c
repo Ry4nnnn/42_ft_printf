@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf_ptr.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/13 22:02:54 by welim             #+#    #+#             */
+/*   Updated: 2022/05/13 22:07:04 by welim            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/ft_printf.h"
 
 static char	*ft_hex_ptr(unsigned long long num)
@@ -21,7 +33,7 @@ static char	*ft_hex_ptr(unsigned long long num)
 static void	count_spc(t_format *frmt, int *space, int len)
 {
 	*space = 0;
-	if (frmt->width >len)
+	if (frmt->width > len)
 	{
 		*space = frmt->width - len;
 		frmt->size += frmt->width;
@@ -32,9 +44,9 @@ static void	count_spc(t_format *frmt, int *space, int len)
 
 void	ft_printf_ptr(t_format *frmt)
 {
-	long long num;
-	char *str;
-	int	space;
+	long long	num;
+	char		*str;
+	int			space;
 
 	num = (long long)va_arg(frmt->args, void *);
 	if (!num)
@@ -47,17 +59,11 @@ void	ft_printf_ptr(t_format *frmt)
 		str = ft_hex_ptr(num);
 		count_spc(frmt, &space, ft_strlen(str) + 2);
 		if (!frmt->minus)
-		{
 			ft_putnchar_fd(' ', space, 1);
-			ft_putstr_fd("0x", 1);
-			ft_putstr_fd(str, 1);
-		}
-		else if (frmt->minus)
-		{
-			ft_putstr_fd("0x", 1);
-			ft_putstr_fd(str, 1);
+		ft_putstr_fd("0x", 1);
+		ft_putstr_fd(str, 1);
+		if (frmt->minus)
 			ft_putnchar_fd(' ', space, 1);
-		}
 		free(str);
 	}
 }
