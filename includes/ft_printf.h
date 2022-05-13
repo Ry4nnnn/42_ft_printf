@@ -4,7 +4,9 @@
 # include <stdarg.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <limits.h>
 # include "../libft/libft.h"
+# include <stdio.h>
 
 //struct that stores types of format
 typedef struct s_format
@@ -35,9 +37,9 @@ void	ft_printf_ptr(t_format *frmt);
 
 //utils
 void	ft_putnchar_fd(char c, int n, int fd);
-void	ft_putnbr_fd_long(unsigned int num, int fd);
 char	*ft_rev(char *str);
-char	*to_hex(unsigned long long num);
+
+//utils for ft_printf_uint
 char	*ft_long_itoa(long long n);
 
 #endif

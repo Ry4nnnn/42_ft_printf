@@ -1,13 +1,16 @@
 NAME	= libftprintf.a
 LIB		= ./libft
-SRCS	= srcs/ft_printf.c formatting/ft_printf_char.c formatting/ft_printf_int.c \
-formatting/ft_printf_str.c formatting/ft_printf_uint.c utils/utils.c utils/utils2.c
+SRCS	=  formatting/ft_printf_ptr.c formatting/ft_printf_char.c formatting/ft_printf_int.c \
+			formatting/ft_printf_str.c formatting/ft_printf_uint.c formatting/ft_printf_hex.c \
+			utils/utils.c utils/utils_uint.c srcs/ft_printf.c
 OBJS	= $(SRCS:.c=.o)
 CC		= gcc
 CFLAGS	= -Wall -Werror -Wextra
 RM		= rm -rf
 
 all		: ${NAME}
+
+bonus	: ${NAME}
 
 $(NAME)	: ${OBJS}
 		make re -C ${LIB}

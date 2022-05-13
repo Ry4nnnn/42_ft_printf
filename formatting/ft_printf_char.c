@@ -2,7 +2,7 @@
 
 void	print_char(t_format *frmt)
 {
-	int c;
+	int	c;
 
 	c = va_arg(frmt->args, int);
 	frmt->size += 1;
@@ -11,8 +11,8 @@ void	print_char(t_format *frmt)
 
 void	print_width(t_format *frmt)
 {
-	int width;
-	int c;
+	int	width;
+	int	c;
 
 	width = frmt->width;
 	while (width-- > 1)

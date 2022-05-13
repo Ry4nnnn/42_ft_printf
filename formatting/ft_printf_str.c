@@ -5,7 +5,7 @@ static void	count_spc_prc(t_format *frmt, int *space, char *str)
 	*space = 0;
 	if (!frmt->precision && frmt->dot)
 		frmt->precision = 0;
-	if (!frmt->precision || frmt->precision > (int) ft_strlen(str))
+	else if (!frmt->precision || frmt->precision > (int) ft_strlen(str))
 		frmt->precision = ft_strlen(str);
 	if (frmt->width > frmt->precision)
 		*space = frmt->width - frmt->precision;
@@ -16,6 +16,7 @@ void	ft_printf_str(t_format *frmt)
 	char	*str;
 	int		space;
 
+	// printf ("%d", frmt->precision);
 	str = va_arg(frmt->args, char*);
 	if (!str)
 	{
@@ -24,6 +25,7 @@ void	ft_printf_str(t_format *frmt)
 		return ;
 	}
 	count_spc_prc(frmt, &space, str);
+	// printf ("%d", frmt->precision);
 	if (frmt->minus)
 	{
 		write(1, str, frmt->precision);

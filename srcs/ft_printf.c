@@ -39,15 +39,15 @@ static void	handle_specifier(t_format *frmt, char *input, int i)
 		ft_printf_str(frmt);
 	if (input[i] == 'u')//						unsigned int
 		ft_printf_uint(frmt);
-	// if (input[i] == 'x' || input[i] == 'X')//	hexadecimal
-	// 	ft_printf_hex(frmt);
-	// if (input[i] == 'p')//						pointer
-	// 	ft_printf_ptr(frmt);
+	if (input[i] == 'x' || input[i] == 'X')//	hexadecimal
+		ft_printf_hex(frmt);
+	if (input[i] == 'p')//						pointer
+		ft_printf_ptr(frmt);
 	if (input[i] == '%')//						prints '%' character
 		frmt->size += write(1, &input[i], 1);
 }
 
-//this function will trverse through the input string 
+//this function will tranverse through the input string 
 //in the case of encountering %, it does :
 //1. reset the format type
 //2. populate the format type
@@ -61,10 +61,10 @@ static int	handle_flags(t_format *frmt, char *input, int i)
 			frmt->minus = 1;
 		if (input[i] == ' ')
 			frmt->space = 1;
-		if (ft_isdigit(input[i]) && !frmt->precision && input[i + 1] != '.')
-			frmt->width = (frmt->width * 10) + (input[i] - '0');
 		if (ft_isdigit(input[i]) && frmt->dot)
 			frmt->precision = (frmt->precision * 10) + (input[i] - '0');
+		if (ft_isdigit(input[i]) && !frmt->precision && input[i + 1] != '.')
+			frmt->width = (frmt->width * 10) + (input[i] - '0');
 		if (input[i] == '0' && frmt->width == 0 && !frmt->minus && !frmt->precision)
 			frmt->zero = 1;
 		if (input[i] == '+')
@@ -75,6 +75,7 @@ static int	handle_flags(t_format *frmt, char *input, int i)
 			frmt->dot = 1;
 		i++;
 	}
+	// printf ("%d", frmt->precision);
 	if (input[i] == 'X')
 		frmt->cap_x = 1;
 	handle_specifier(frmt, input, i);
@@ -99,7 +100,9 @@ int ft_printf(const char *input, ...)
 	{
 		frmt = reset_format(frmt);// reset struct to default 0
 		if (input[i] == '%')
+		{
 			i = handle_flags(frmt, (char *)input, i + 1);
+		}
 		else
 		{
 			output += write(1, &input[i], 1);//	print out character if its not %
